@@ -1,65 +1,78 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const features = [
+  { icon: "🔐", title: "Role-based access",   desc: "Admin, teacher, student, and parent views with tailored permissions." },
+  { icon: "📊", title: "Grades & attendance",  desc: "Track progress in real time with grade entries and attendance logs." },
+  { icon: "💬", title: "Communication",        desc: "Teachers and parents can send contextual messages to stay aligned." },
+  { icon: "📅", title: "Schedules",            desc: "Students view their weekly timetable with subjects and teachers." },
+];
+
+const roles = [
+  { role: "Admin",   color: "#6366f1", desc: "Manage users, students, and all system data." },
+  { role: "Teacher", color: "#8b5cf6", desc: "Record grades, attendance, and message parents." },
+  { role: "Student", color: "#10b981", desc: "View grades, schedule, and class updates." },
+  { role: "Parent",  color: "#f59e0b", desc: "Monitor your child's progress and attendance." },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main style={{ background: "var(--bg)", minHeight: "100vh" }}>
+
+      {/* Hero */}
+      <section style={{ maxWidth: 1100, margin: "0 auto", padding: "72px 24px 56px" }}>
+        <div style={{ display: "grid", gap: 48, gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", background: "var(--accent-dim)", color: "var(--accent-h)", border: "1px solid rgba(79,126,248,0.3)", borderRadius: 999, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", width: "fit-content" }}>
+              STUDENT MANAGEMENT SYSTEM
+            </span>
+            <h1 style={{ fontSize: 44, fontWeight: 800, color: "var(--text)", lineHeight: 1.15, letterSpacing: "-0.02em" }}>
+              Manage your school<br />
+              <span style={{ color: "var(--accent)" }}>smarter, faster.</span>
+            </h1>
+            <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.7, maxWidth: 440 }}>
+              A unified platform for admins, teachers, students, and parents. Track grades, attendance, schedules, and communication — all in one place.
+            </p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <Link href="/login"    className="btn btn-primary" style={{ padding: "10px 22px", fontSize: 14 }}>Get Started →</Link>
+              <Link href="/register" className="btn btn-ghost"   style={{ padding: "10px 22px", fontSize: 14 }}>Create Account</Link>
+            </div>
+            <div style={{ display: "flex", gap: 28, paddingTop: 4 }}>
+              {[["4","Roles"],["REST","API"],["JWT","Auth"],["Live","Demo"]].map(([v,l]) => (
+                <div key={l}>
+                  <p style={{ fontSize: 20, fontWeight: 700, color: "var(--accent)" }}>{v}</p>
+                  <p style={{ fontSize: 11, color: "var(--text-3)", marginTop: 2 }}>{l}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {features.map((f) => (
+              <div key={f.title} className="card" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <span style={{ fontSize: 22 }}>{f.icon}</span>
+                <p style={{ fontWeight: 600, fontSize: 13, color: "var(--text)" }}>{f.title}</p>
+                <p style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.6 }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Roles */}
+      <section style={{ borderTop: "1px solid var(--border)", maxWidth: 1100, margin: "0 auto", padding: "48px 24px" }}>
+        <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-2)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>Who uses SchoolMS</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
+          {roles.map((r) => (
+            <div key={r.role} className="card" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <span style={{ background: r.color + "20", color: r.color, borderRadius: 6, padding: "3px 10px", fontSize: 11, fontWeight: 700, width: "fit-content" }}>{r.role}</span>
+              <p style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.6 }}>{r.desc}</p>
+              <Link href="/login" style={{ color: r.color, fontSize: 12, fontWeight: 600, textDecoration: "none" }}>Sign in →</Link>
+            </div>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+
+    </main>
   );
 }
