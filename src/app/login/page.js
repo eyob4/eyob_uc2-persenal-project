@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API = process.env.NEXT_PUBLIC_API_URL || "";
 
 const DESTINATIONS = { admin: "/dashboard/admin", teacher: "/dashboard/teacher", student: "/dashboard/student", parent: "/dashboard/parent" };
 
@@ -26,7 +26,7 @@ export default function LoginPage() {
       localStorage.setItem("sms_role",  data.user.role);
       router.push(DESTINATIONS[data.user.role] || "/dashboard");
     } catch {
-      setError("Cannot reach server. Make sure the backend is running.");
+      setError("Cannot reach the app server. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API = process.env.NEXT_PUBLIC_API_URL || "";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function RegisterPage() {
       if (!res.ok) { setError(data.message || "Registration failed"); return; }
       router.push("/login");
     } catch {
-      setError("Cannot reach server. Make sure the backend is running.");
+      setError("Cannot reach the app server. Please try again.");
     } finally {
       setLoading(false);
     }
