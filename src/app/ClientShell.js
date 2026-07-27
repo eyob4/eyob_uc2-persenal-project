@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+const DASHBOARD_PREFIXES = ["/admin", "/teacher", "/student", "/parent"];
+
 export default function ClientShell({ children }) {
   const pathname   = usePathname();
-  const isDashboard = pathname?.startsWith("/dashboard");
+  const isDashboard = DASHBOARD_PREFIXES.some((p) => pathname === p || pathname?.startsWith(p + "/"));
 
   return (
     <>
@@ -17,7 +19,7 @@ export default function ClientShell({ children }) {
               <span style={{ fontWeight: 600, fontSize: 15, color: "var(--text)" }}>SchoolMS</span>
             </Link>
             <nav style={{ display: "flex", alignItems: "center", gap: 4 }}>
-              {[{ href: "/", label: "Home" }, { href: "/dashboard", label: "Dashboard" }].map((l) => (
+              {[{ href: "/", label: "Home" }].map((l) => (
                 <Link key={l.href} href={l.href}
                   style={{ padding: "6px 12px", borderRadius: 8, fontSize: 13, fontWeight: 500, color: "var(--text-2)", textDecoration: "none", transition: "all 0.12s" }}
                   onMouseEnter={(e) => { e.target.style.background = "var(--surface2)"; e.target.style.color = "var(--text)"; }}

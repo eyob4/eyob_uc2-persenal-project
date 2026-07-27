@@ -1,42 +1,32 @@
-import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-import User from "@/lib/models/User";
-import { connectToDatabase } from "@/lib/db";
+import { cookies } from "next/headers";
+import { verifyToken, AUTH_COOKIE } from "@/lib/jwt";
+import { connectToDatabase } from "@/lib/mongodb";
+import User from "@/models/User";
 
-const secret = process.env.JWT_SECRET || "sms-secret";
+/**
+ * Resolves the authenticated user from the JWT cookie.
+ * Pass the NextRequest inside a Route Handler; call with no args inside a
+ * Server Component/layout, where cookies() must be read from next/headers instead.
+ */
+export async function getAuthUser(request) {
+  const tokenValue = request?.cookies
+    ? request.cookies.get(AUTH_COOKIE)?.value
+    : (await cookies()).get(AUTH_COOKIE)?.value;
 
-export async function getAuthenticatedUser(request, allowedRoles = []) {
+  if (!tokenValue) {
+    return null;
+  }
+
+  const payload = verifyToken(tokenValue);
+  if (!payload?.userId) {
+    return null;
+  }
+
   await connectToDatabase();
-
-  const header = request.headers.get("authorization");
-  const token = header && header.startsWith("Bearer ") ? header.slice(7) : null;
-
-  if (!token) {
-    return {
-      error: NextResponse.json({ message: "Unauthorized: token missing" }, { status: 401 }),
-    };
+  const user = await User.findById(payload.userId).select("-password");
+  if (!user || user.isActive === false) {
+    return null;
   }
 
-  try {
-    const decoded = jwt.verify(token, secret);
-    const user = await User.findById(decoded.id).select("-password");
-
-    if (!user) {
-      return {
-        error: NextResponse.json({ message: "Unauthorized: invalid user" }, { status: 401 }),
-      };
-    }
-
-    if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-      return {
-        error: NextResponse.json({ message: "Forbidden: insufficient role" }, { status: 403 }),
-      };
-    }
-
-    return { user };
-  } catch {
-    return {
-      error: NextResponse.json({ message: "Unauthorized: invalid token" }, { status: 401 }),
-    };
-  }
+  return user;
 }
